@@ -11,6 +11,7 @@ import timeit
 start = timeit.default_timer()
 
 from sklearn.preprocessing import Normalizer
+from sklearn.decomposition import PCA
 from sklearn.ensemble import BaggingClassifier
 import sklearn
 
@@ -30,7 +31,6 @@ for single_record in train_file:
 	# Turn the list of string attributes into appropriate integers and floats. 
 	single_recordInt = [str(single_record[0]), int(single_record[1]), int(single_record[2]), int(single_record[3]), int(single_record[4])]
 	trainset.append(single_recordInt)
-
 
 
 
@@ -63,6 +63,32 @@ testset_labelsY = trainset_labelsY[N:]
 trainset_labelsY = trainset_labelsY[:N]
 
 #------------------------------------------
+# Normalize the training data: 
+scaler = Normalizer().fit(trainset)
+trainset = scaler.transform(trainset)
+
+
+# Normalize the test data: 
+scaler_test = Normalizer().fit(testset)
+testset = scaler_test.transform(testset)
+
+
+# Instantiate the PCA tool to transform the data using Principal Component Analysis.
+pca = PCA()
+# Transform the training data so you have a PCA-transformed data set.
+trainset = pca.fit_transform(trainset)
+# transform test data using the previously fitted PCA object. 
+testset = pca.transform(testset)
+
+
+
+
+
+
+
+
+
+
 
 
 # Calculates average runtime of the code.
