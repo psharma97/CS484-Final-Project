@@ -13,6 +13,8 @@ start = timeit.default_timer()
 from sklearn.preprocessing import Normalizer
 from sklearn.decomposition import PCA
 from sklearn.ensemble import BaggingClassifier
+from sklearn import model_selection
+from sklearn.tree import DecisionTreeClassifier
 import sklearn
 
 
@@ -29,8 +31,8 @@ trainset = []
 for single_record in train_file:
 	single_record = single_record.split(',')
 	# Turn the list of string attributes into appropriate integers and floats. 
-	single_recordInt = [str(single_record[0]), int(single_record[1]), int(single_record[2]), int(single_record[3]), int(single_record[4])]
-	trainset.append(single_recordInt)
+	single_recordAtrib = [str(single_record[0]), int(single_record[1]), int(single_record[2]), int(single_record[3]), int(single_record[4])]
+	trainset.append(single_recordAtrib)
 
 
 
@@ -43,24 +45,24 @@ for single_record in trainset:
 	trainset_labelsY.append(label)
 	
 	
-print(trainset)
-print(trainset_labelsY)
-print(len(trainset))
-print(len(trainset_labelsY))
+# print(trainset)
+# print(trainset_labelsY)
+# print(len(trainset))
+# print(len(trainset_labelsY))
 
 
 # Set aside some of the training set, "trainset" for Cross Validation/Holdout. We will call
 # this the "testset". We will have approximately a 70-30 split. Where 70% of data is 
 # training and 30% is the test set.
-original_trainsetlen = len(trainset)
-original_trainsetlnY = len(trainset_labelsY)
-N = int(len(trainset)*.70)
-
-testset = trainset[N:]
-trainset = trainset[:N]
-
-testset_labelsY = trainset_labelsY[N:]
-trainset_labelsY = trainset_labelsY[:N]
+# original_trainsetlen = len(trainset)
+# original_trainsetlnY = len(trainset_labelsY)
+# N = int(len(trainset)*.70)
+# 
+# testset = trainset[N:]
+# trainset = trainset[:N]
+# 
+# testset_labelsY = trainset_labelsY[N:]
+# trainset_labelsY = trainset_labelsY[:N]
 
 #------------------------------------------
 # Normalize the training data: 
@@ -68,23 +70,34 @@ scaler = Normalizer().fit(trainset)
 trainset = scaler.transform(trainset)
 
 
-# Normalize the test data: 
-scaler_test = Normalizer().fit(testset)
-testset = scaler_test.transform(testset)
+# Normalize the test data: Don't need if using KFold Validation.
+# scaler_test = Normalizer().fit(testset)
+# testset = scaler_test.transform(testset)
 
 
 # Instantiate the PCA tool to transform the data using Principal Component Analysis.
 pca = PCA()
+
 # Transform the training data so you have a PCA-transformed data set.
 trainset = pca.fit_transform(trainset)
+
 # transform test data using the previously fitted PCA object. 
-testset = pca.transform(testset)
+# testset = pca.transform(testset)
 
 
 
 
+# ------------------ MAJORITY VOTING IMPlEMAENTATION?---------------------------
+kfold = model_selection.KFold(n_splits=10, random_state=42)
+cart = DecisionTreeClassifier()
 
 
+model = BaggingClassifier(base_estimator = DecisionTreeClassifier(), n_estimators= 100, random_state= 42)
+
+results = model_selection.cross_val_score(model, trainset, trainset_labelsY, cv = kfold)
+
+
+print(results.mean())
 
 
 
@@ -99,3 +112,5 @@ print('Time: ', stop - start)
 
 
 
+# WITHOUT DATA NORMALIZATION/PCA: 0.7970302099334358
+# WITH DATA NORMALIZATION/PCA:  0.8706605222734254
