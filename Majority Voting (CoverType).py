@@ -8,6 +8,8 @@ start = timeit.default_timer()
 from sklearn.preprocessing import Normalizer
 from sklearn.decomposition import PCA
 from sklearn.ensemble import BaggingClassifier
+from sklearn import model_selection
+from sklearn.tree import DecisionTreeClassifier
 import sklearn
 
 
@@ -37,10 +39,10 @@ for single_record in trainset:
 	trainset_labelsY.append(label)
 
 
-print(trainset)
-print(trainset_labelsY)
-print(len(trainset))
-print(len(trainset_labelsY))
+# print(trainset)
+# print(trainset_labelsY)
+# print(len(trainset))
+# print(len(trainset_labelsY))
 
 
 
@@ -79,6 +81,17 @@ testset = pca.transform(testset)
 
 
 
+# ------------------ MAJORITY VOTING IMP? ---------------------------
+# kfold = model_selection.KFold(n_splits=10, random_state=42)
+# cart = DecisionTreeClassifier()
+# 
+# 
+# model = BaggingClassifier(base_estimator = DecisionTreeClassifier(), n_estimators= 100, random_state= 42)
+# 
+# results = model_selection.cross_val_score(model, trainset, trainset_labelsY, cv = kfold)
+# 
+# 
+# print(results.mean())
 
 
 
