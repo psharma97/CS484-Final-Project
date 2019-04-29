@@ -81,17 +81,8 @@ testset = pca.transform(testset)
 
 
 
-# ------------------ MAJORITY VOTING IMP? ---------------------------
-# kfold = model_selection.KFold(n_splits=10, random_state=42)
-# cart = DecisionTreeClassifier()
-# 
-# 
-# model = BaggingClassifier(base_estimator = DecisionTreeClassifier(), n_estimators= 100, random_state= 42)
-# 
-# results = model_selection.cross_val_score(model, trainset, trainset_labelsY, cv = kfold)
-# 
-# 
-# print(results.mean())
+# ------------------ BORDA VOTING IMP? ---------------------------
+
 
 
 
