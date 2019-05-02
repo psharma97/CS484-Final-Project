@@ -49,49 +49,57 @@ for single_record in trainset:
 # Set aside some of the training set, "trainset" for Cross Validation/Holdout. We will call
 # this the "testset". We will have approximately a 70-30 split. Where 70% of data is 
 # training and 30% is the test set.
-original_trainsetlen = len(trainset)
-original_trainsetlnY = len(trainset_labelsY)
-N = int(len(trainset)*.70)
-
-testset = trainset[N:]
-trainset = trainset[:N]
-
-testset_labelsY = trainset_labelsY[N:]
-trainset_labelsY = trainset_labelsY[:N]
+# original_trainsetlen = len(trainset)
+# original_trainsetlnY = len(trainset_labelsY)
+# N = int(len(trainset)*.70)
+# 
+# testset = trainset[N:]
+# trainset = trainset[:N]
+# 
+# testset_labelsY = trainset_labelsY[N:]
+# trainset_labelsY = trainset_labelsY[:N]
 
 #------------------------------------------
 # Normalize the training data: 
-scaler = Normalizer().fit(trainset)
-trainset = scaler.transform(trainset)
+# scaler = Normalizer().fit(trainset)
+# trainset = scaler.transform(trainset)
+# 
+# 
+# # Normalize the test data: 
+# scaler_test = Normalizer().fit(testset)
+# testset = scaler_test.transform(testset)
+# 
+# 
+# # Instantiate the PCA tool to transform the data using Principal Component Analysis.
+# pca = PCA()
+# # Transform the training data so you have a PCA-transformed data set.
+# trainset = pca.fit_transform(trainset)
+# # transform test data using the previously fitted PCA object. 
+# testset = pca.transform(testset)
 
 
-# Normalize the test data: 
-scaler_test = Normalizer().fit(testset)
-testset = scaler_test.transform(testset)
 
-
-# Instantiate the PCA tool to transform the data using Principal Component Analysis.
-pca = PCA()
-# Transform the training data so you have a PCA-transformed data set.
-trainset = pca.fit_transform(trainset)
-# transform test data using the previously fitted PCA object. 
-testset = pca.transform(testset)
-
-
-
-
+print("GOT HERE!")
 
 # ------------------ MAJORITY VOTING IMP? ---------------------------
-# kfold = model_selection.KFold(n_splits=10, random_state=42)
-# cart = DecisionTreeClassifier()
-# 
-# 
-# model = BaggingClassifier(base_estimator = DecisionTreeClassifier(), n_estimators= 100, random_state= 42)
-# 
-# results = model_selection.cross_val_score(model, trainset, trainset_labelsY, cv = kfold)
-# 
-# 
-# print(results.mean())
+# K-fold cross validation. With 10 splits. 
+kfold = model_selection.KFold(n_splits=10, random_state=42)
+cart = DecisionTreeClassifier()
+
+
+model = BaggingClassifier(base_estimator = DecisionTreeClassifier(), n_estimators= 100, random_state= 42)
+
+results = model_selection.cross_val_score(model, trainset, trainset_labelsY, cv = kfold)
+
+
+
+
+print(results)
+print("MIN: ", results.min())
+print("MAX: ", results.max())
+print("MEAN: ", results.mean())
+
+
 
 
 

@@ -96,8 +96,10 @@ model = BaggingClassifier(base_estimator = DecisionTreeClassifier(), n_estimator
 
 results = model_selection.cross_val_score(model, trainset, trainset_labelsY, cv = kfold)
 
-
-print(results.mean())
+print(results)
+print("MIN: ", results.min())
+print("MAX: ", results.max())
+print("MEAN: ", results.mean())
 
 
 
@@ -114,3 +116,6 @@ print('Time: ', stop - start)
 
 # WITHOUT DATA NORMALIZATION/PCA: 0.7970302099334358
 # WITH DATA NORMALIZATION/PCA:  0.8706605222734254
+
+
+
