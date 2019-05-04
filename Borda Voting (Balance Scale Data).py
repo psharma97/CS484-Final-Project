@@ -16,6 +16,8 @@ from sklearn.ensemble import BaggingClassifier
 from sklearn import model_selection
 from sklearn.tree import DecisionTreeClassifier
 import sklearn
+import numpy as np
+import import scipy.stats as ss
 
 
 #Open/load training data for CoverType. Training & testing are both same. 
@@ -88,7 +90,26 @@ trainset = pca.fit_transform(trainset)
 
 
 # ------------------ BORDA VOTING IMPlEMAENTATION?---------------------------
+#Borda Conunting Method Function
+def myborda(probs):
+    probrank=[]
+    
+    for i in range(probs.shape[0]):
+        probrank.append(ss.rankdata(probs[i,:],method='average')-1)
+    
+    probrank=np.array(probrank)
+    print(probrank)
+    
+    ranksums=np.sum(probrank,0)
+    print(ranksums)
+    
+    #return the column index of the class with the max number of points
+    return np.argmax(ranksums)
 
+
+#Bagging Samples, each row of mega_index is a sample
+# each column of a row being the index of trainset to be included in the sample
+mega_index=np.random.randint(len(trainset),size=(3,len(trainset)/3))
 
 
 
