@@ -44,7 +44,10 @@ for single_record in trainset:
 	label = single_record.pop(0)
 	trainset_labelsY.append(label)
 	
-	
+
+
+
+
 # print(trainset)
 # print(trainset_labelsY)
 # print(len(trainset))
@@ -92,10 +95,13 @@ kfold = model_selection.KFold(n_splits=10, random_state=42)
 cart = DecisionTreeClassifier()
 
 
-model = BaggingClassifier(base_estimator = DecisionTreeClassifier(), n_estimators= 100, random_state= 42)
+model = BaggingClassifier(base_estimator = DecisionTreeClassifier(max_depth = 3), n_estimators= 20, random_state= 42)
 
 results = model_selection.cross_val_score(model, trainset, trainset_labelsY, cv = kfold)
 
+
+print(" Normalized/PCA. Max_depth = 3, n_estimators = 20.")
+print("--------------------------------------------")
 print(results)
 print("MIN: ", results.min())
 print("MAX: ", results.max())

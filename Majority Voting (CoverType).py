@@ -39,6 +39,13 @@ for single_record in trainset:
 	trainset_labelsY.append(label)
 
 
+# Trim the training set by half. It took too long to run all 581,012 records. 
+# N = int(len(trainset)*0.60)
+# trainset = trainset[N:]
+# trainset_labelsY = trainset_labelsY[N:]
+
+print(len(trainset))
+
 # print(trainset)
 # print(trainset_labelsY)
 # print(len(trainset))
@@ -66,15 +73,17 @@ for single_record in trainset:
 # 
 # 
 # # Normalize the test data: 
-# scaler_test = Normalizer().fit(testset)
-# testset = scaler_test.transform(testset)
+# # scaler_test = Normalizer().fit(testset)
+# # testset = scaler_test.transform(testset)
 # 
 # 
 # # Instantiate the PCA tool to transform the data using Principal Component Analysis.
 # pca = PCA()
+# 
 # # Transform the training data so you have a PCA-transformed data set.
 # trainset = pca.fit_transform(trainset)
-# # transform test data using the previously fitted PCA object. 
+
+# transform test data using the previously fitted PCA object. 
 # testset = pca.transform(testset)
 
 
@@ -87,13 +96,14 @@ kfold = model_selection.KFold(n_splits=10, random_state=42)
 cart = DecisionTreeClassifier()
 
 
-model = BaggingClassifier(base_estimator = DecisionTreeClassifier(), n_estimators= 100, random_state= 42)
+model = BaggingClassifier(base_estimator = DecisionTreeClassifier(max_depth = 7), n_estimators= 20, random_state= 42, n_jobs = -1)
 
 results = model_selection.cross_val_score(model, trainset, trainset_labelsY, cv = kfold)
 
 
 
-
+print("Not PCA/Normalization. Full data. n_estimators = 20. max_depth =7.")
+print("#----------------------------------------#")
 print(results)
 print("MIN: ", results.min())
 print("MAX: ", results.max())
